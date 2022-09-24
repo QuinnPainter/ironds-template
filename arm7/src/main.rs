@@ -3,7 +3,7 @@
 #![feature(isa_attribute)]
 extern crate alloc;
 //use core::ptr;
-use ndsdx as nds;
+use ironds as nds;
 
 #[no_mangle]
 extern "C" fn main() -> ! {

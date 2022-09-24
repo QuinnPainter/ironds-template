@@ -4,5 +4,5 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-ndsdx = { path = "../../ndsdx", features = ["arm9"] }
+ironds = { path = "../../ironds", features = ["arm9"] }
 arrayvec = { version = "0.7.2", default-features = false }

@@ -4,8 +4,8 @@
 extern crate alloc;
 use core::ptr;
 use core::fmt::Write;
-use ndsdx as nds;
-//use ndsdx::nocash;
+use ironds as nds;
+//use ironds::nocash;
 //use alloc::string::String;
 
 const DISPCNT: u32 = 0x04000000;
