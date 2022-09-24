@@ -22,19 +22,19 @@ extern "C" fn main() -> ! {
     }
     let mut stuff = ArrayString::<100>::new();
 
-    nds::timers::start_program_timer(0);
+    nds::timers::start_profiler_timer(0);
     sieve_bench();
-    let time = nds::timers::stop_program_timer(0);
+    let time = nds::timers::end_profiler_timer(0);
     write!(&mut stuff, "{}\n", time).unwrap();
 
-    nds::timers::start_program_timer(0);
+    nds::timers::start_profiler_timer(0);
     sieve_bench();
-    let time = nds::timers::stop_program_timer(0);
+    let time = nds::timers::end_profiler_timer(0);
     write!(&mut stuff, "{}\n", time).unwrap();
 
-    nds::timers::start_program_timer(0);
+    nds::timers::start_profiler_timer(0);
     unsafe {core::ptr::copy(0x02000000 as *const u8, 0x02200000 as *mut u8, 1000); }
-    let time = nds::timers::stop_program_timer(0);
+    let time = nds::timers::end_profiler_timer(0);
     write!(&mut stuff, "{}\n", time).unwrap();
 
     stuff.push_str("hoofa");
@@ -112,10 +112,3 @@ fn sieve_bench() -> u32 {
     }
     count
 }
-
-/*#[panic_handler]
-fn panic(_info: &core::panic::PanicInfo) -> ! {
-    let mut output = String::new();
-    fmt::write(&mut output, format_args!("{}", _info));
-    loop {}
-}*/

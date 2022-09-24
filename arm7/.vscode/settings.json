@@ -4,4 +4,7 @@
     "rust-analyzer.cargo.features": [
         "arm7"
     ],
+    "files.associations": {
+        "*.s": "arm"
+    }
 }
