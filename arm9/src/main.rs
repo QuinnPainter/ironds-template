@@ -14,6 +14,7 @@ const VRAMCNT_A: u32 = 0x04000240;
 use arrayvec::ArrayString;
 
 static mut framectr: u32 = 0;
+static mut ctr2: u32 = 0;
 
 #[no_mangle]
 extern "C" fn main() -> ! {
@@ -23,7 +24,8 @@ extern "C" fn main() -> ! {
         ptr::write_volatile((0x06800000 + 256 * 4) as *mut u16, 0xFFFF);
     }
     nds::interrupt::irq_set_handler(Some(inter));
-    nds::interrupt::irq_enable(nds::interrupt::IRQFlags::VBLANK);
+    nds::interrupt::irq_enable(nds::interrupt::IRQFlags::VBLANK | nds::interrupt::IRQFlags::VCOUNT);
+    nds::display::set_vcount_trigger(100);
 
     let mut stuff = ArrayString::<100>::new();
 
@@ -75,7 +77,9 @@ extern "C" fn main() -> ! {
         let mut stuff = ArrayString::<20>::new();
         write!(&mut stuff, "{}\n", counter).unwrap();
         counter = counter.wrapping_add(1);
-        write!(&mut stuff, "{}", unsafe {framectr} / 60 ).unwrap();
+        write!(&mut stuff, "{}\n", unsafe {framectr} / 60 ).unwrap();
+        write!(&mut stuff, "{}\n", unsafe {ctr2} / 60 ).unwrap();
+        write!(&mut stuff, "{}\n", nds::mmio::VCOUNT.read()).unwrap();
         nds::display::console::set_cursor_pos(0, 15);
         nds::display::console::print(stuff.as_str());
     }
@@ -122,5 +126,15 @@ fn sieve_bench() -> u32 {
 extern "C" fn inter (f: nds::interrupt::IRQFlags) {
     if f.contains(nds::interrupt::IRQFlags::VBLANK) {
         unsafe { framectr += 1; }
+    }
+    else if f.contains(nds::interrupt::IRQFlags::VCOUNT) {
+        unsafe {
+            ctr2 += 1;
+            if ctr2 & 1 > 0 {
+                nds::display::set_vcount_trigger(100);
+            } else {
+                nds::display::set_vcount_trigger(130);
+            }
+        }
     }
 }
