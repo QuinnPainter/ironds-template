@@ -74,12 +74,13 @@ extern "C" fn main() -> ! {
     //    .with_tile_obj(nds::display::tile_obj_2D));
     let mut counter: u32 = 0;
     loop {
-        let mut stuff = ArrayString::<20>::new();
+        let mut stuff = ArrayString::<50>::new();
         write!(&mut stuff, "{}\n", counter).unwrap();
         counter = counter.wrapping_add(1);
         write!(&mut stuff, "{}\n", unsafe {framectr} / 60 ).unwrap();
         write!(&mut stuff, "{}\n", unsafe {ctr2} / 60 ).unwrap();
         write!(&mut stuff, "{}\n", nds::mmio::VCOUNT.read()).unwrap();
+        write!(&mut stuff, "{}\n", nds::input::read_keys().bits()).unwrap();
         nds::display::console::set_cursor_pos(0, 15);
         nds::display::console::print(stuff.as_str());
     }

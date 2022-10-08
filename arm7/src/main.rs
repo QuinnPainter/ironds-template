@@ -8,5 +8,7 @@ use ironds as nds;
 #[no_mangle]
 extern "C" fn main() -> ! {
 
-    loop {}
+    loop {
+        nds::input::scan_keys();
+    }
 }
