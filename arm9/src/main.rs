@@ -81,8 +81,11 @@ extern "C" fn main() -> ! {
         write!(&mut stuff, "{}\n", unsafe {ctr2} / 60 ).unwrap();
         write!(&mut stuff, "{}\n", nds::mmio::VCOUNT.read()).unwrap();
         write!(&mut stuff, "{}\n", nds::input::read_keys().bits()).unwrap();
+        //write!(&mut stuff, "{}\n", unsafe{ptr::read_volatile(0x023FF008 as *const u32)}).unwrap();
+        //write!(&mut stuff, "{}\n", unsafe{nds::mmio::DISPSTAT.read() as u32}).unwrap();
         nds::display::console::set_cursor_pos(0, 15);
         nds::display::console::print(stuff.as_str());
+        nds::interrupt::wait_for_vblank();
     }
 }
 
