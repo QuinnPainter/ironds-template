@@ -1,6 +1,5 @@
 #![no_std]
 #![no_main]
-#![feature(isa_attribute)]
 extern crate alloc;
 use core::ptr;
 use core::fmt::Write;
