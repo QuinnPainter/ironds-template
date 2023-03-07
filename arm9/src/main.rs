@@ -2,7 +2,7 @@
 #![no_main]
 extern crate alloc;
 use core::ptr;
-use core::fmt::Write;
+use core::fmt::{Write, Debug};
 use ironds as nds;
 //use ironds::nocash;
 //use alloc::string::String;
@@ -36,7 +36,15 @@ extern "C" fn main() -> ! {
     nds::timers::start_profiler_timer(0);
     sieve_bench();
     let time = nds::timers::end_profiler_timer(0);
-    write!(&mut stuff, "{}\n", time).unwrap();
+    match write!(&mut stuff, "{}\n", time) {
+        Ok(_) => (),
+        Err(e) => panic!("{}", e)
+    }
+    nds::display::obj::set_sprite(nds::display::GfxEngine::MAIN, 1, nds::display::obj::Sprite::NormalSprite(nds::display::obj::NormalSprite::new()
+        .with_y(40)
+        .with_h_flip(true)
+        .with_x(20)
+        .with_palette(4)));
 
     nds::timers::start_profiler_timer(0);
     unsafe {core::ptr::copy(0x02000000 as *const u8, 0x02200000 as *mut u8, 1000); }
